@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cloud Architecture Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Engineering blueprint: dense grid over slate ink, mono labels, diagrams as the primary artifact. */
+:root{
+  --bg:#f4f6fa;
+  --surface:#ffffff;
+  --surface-2:#eaeef5;
+  --sheet:#ffffff;
+  --border:#d5dce8;
+  --border-2:#c3cddd;
+  --fg:#101a2e;
+  --fg-strong:#050b18;
+  --muted:#5c6b83;
+  --accent:#1d4ed8;
+  --accent-ink:#ffffff;
+  --accent-soft:#e2eafc;
+  --accent-line:#9db6f5;
+  --c-low-bg:#d9f2ec; --c-low-fg:#0b6a5a;
+  --c-med-bg:#dceafd; --c-med-fg:#1550a8;
+  --c-high-bg:#fbeacf; --c-high-fg:#8a5108;
+  --c-max-bg:#fadadb; --c-max-fg:#9b1c22;
+  --chip-bg:#eef1f7; --chip-fg:#3f4d64; --chip-line:#d7deea;
+  --ok:#0b6a5a;
+  --shadow:0 1px 2px rgba(16,26,46,.06), 0 8px 24px -14px rgba(16,26,46,.28);
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:"Bricolage Grotesque","IBM Plex Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#080d19;
+    --surface:#101827;
+    --surface-2:#162034;
+    --sheet:#f7f9fc;
+    --border:#243247;
+    --border-2:#33455f;
+    --fg:#e4ebf7;
+    --fg-strong:#ffffff;
+    --muted:#93a3bd;
+    --accent:#78aaff;
+    --accent-ink:#06101f;
+    --accent-soft:#172a4d;
+    --accent-line:#3c5f9e;
+    --c-low-bg:#0d3b34; --c-low-fg:#6fe0c8;
+    --c-med-bg:#122c50; --c-med-fg:#8dbcfb;
+    --c-high-bg:#42270c; --c-high-fg:#f0bb72;
+    --c-max-bg:#46181c; --c-max-fg:#f79b9f;
+    --chip-bg:#182338; --chip-fg:#b3c2d8; --chip-line:#2b3b55;
+    --ok:#6fe0c8;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#080d19;
+  --surface:#101827;
+  --surface-2:#162034;
+  --sheet:#f7f9fc;
+  --border:#243247;
+  --border-2:#33455f;
+  --fg:#e4ebf7;
+  --fg-strong:#ffffff;
+  --muted:#93a3bd;
+  --accent:#78aaff;
+  --accent-ink:#06101f;
+  --accent-soft:#172a4d;
+  --accent-line:#3c5f9e;
+  --c-low-bg:#0d3b34; --c-low-fg:#6fe0c8;
+  --c-med-bg:#122c50; --c-med-fg:#8dbcfb;
+  --c-high-bg:#42270c; --c-high-fg:#f0bb72;
+  --c-max-bg:#46181c; --c-max-fg:#f79b9f;
+  --chip-bg:#182338; --chip-fg:#b3c2d8; --chip-line:#2b3b55;
+  --ok:#6fe0c8;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+.wrap{max-width:1240px; margin:0 auto; padding-block:0 72px; padding-inline:20px}
+h1,h2,h3,h4{font-family:var(--display); color:var(--fg-strong); margin:0; text-wrap:balance; line-height:1.1}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+
+/* ---- header ---- */
+header.top{
+  position:sticky; top:env(safe-area-inset-top,0px); z-index:40;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+}
+.top-in{max-width:1240px; margin:0 auto; padding-inline:20px; padding-block:10px; display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.brand{display:flex; align-items:baseline; gap:10px; min-width:0}
+.brand b{font-family:var(--display); font-weight:800; letter-spacing:-.02em; font-size:17px; color:var(--fg-strong)}
+.brand span{font-family:var(--mono); font-size:11px; color:var(--muted); letter-spacing:.06em; text-transform:uppercase}
+.topnav{margin-left:auto; display:flex; gap:4px; align-items:center; flex-wrap:wrap}
+.topnav a{font-family:var(--mono); font-size:11.5px; text-decoration:none; color:var(--muted); padding:6px 9px; border-radius:6px; letter-spacing:.02em}
+.topnav a:hover{color:var(--accent); background:var(--accent-soft)}
+.themebtn{border:1px solid var(--border-2); background:var(--surface); color:var(--muted); font-family:var(--mono); font-size:11px; padding:6px 9px; border-radius:6px; cursor:pointer}
+
+/* ---- hero ---- */
+.hero{padding-block:44px 30px; border-bottom:1px solid var(--border)}
+.eyebrow{font-family:var(--mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:14px; display:block}
+.hero h1{font-size:clamp(30px,5.2vw,54px); font-weight:800; letter-spacing:-.03em; max-width:22ch}
+.hero .lede{margin-top:16px; max-width:64ch; color:var(--muted); font-size:17px}
+.hero .who{margin-top:20px; font-family:var(--mono); font-size:12.5px; color:var(--muted); display:flex; gap:8px 18px; flex-wrap:wrap}
+.hero .who b{color:var(--fg); font-weight:500}
+
+/* ---- stat strip ---- */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(148px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-top:26px}
+.stat{background:var(--surface); padding:16px 18px}
+.stat .n{font-family:var(--display); font-size:30px; font-weight:800; letter-spacing:-.02em; color:var(--fg-strong); font-variant-numeric:tabular-nums}
+.stat .l{font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin-top:5px}
+
+/* ---- section ---- */
+section{padding-block:52px 0}
+.sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; border-bottom:2px solid var(--fg-strong); padding-bottom:12px; margin-bottom:28px}
+.sec-head h2{font-size:clamp(22px,3vw,30px); font-weight:700; letter-spacing:-.02em}
+.sec-head .kicker{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+
+/* ---- answers ---- */
+.answers{display:flex; flex-direction:column; gap:22px}
+.q{border:1px solid var(--border); border-radius:14px; background:var(--surface); box-shadow:var(--shadow); overflow:hidden}
+.q-head{display:grid; grid-template-columns:auto 1fr; gap:20px; padding:22px 24px; border-bottom:1px solid var(--border); background:var(--surface-2); align-items:start}
+.q-num{font-family:var(--display); font-size:34px; font-weight:800; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums; letter-spacing:-.03em}
+.q-tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:7px}
+.q-head h3{font-size:clamp(17px,2vw,21px); font-weight:700; letter-spacing:-.01em; max-width:70ch}
+.q-body{padding:22px 24px 26px; display:flex; flex-direction:column; gap:16px}
+.q-body p{max-width:74ch}
+.q-body h4{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--accent); margin-top:6px}
+.block{display:flex; flex-direction:column; gap:9px}
+ul.tight{margin:0; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:9px; max-width:78ch}
+ul.tight li{position:relative; padding-left:20px}
+ul.tight li::before{content:""; position:absolute; left:2px; top:.62em; width:6px; height:6px; background:var(--accent); border-radius:1px}
+ul.tight li b{color:var(--fg-strong); font-weight:600}
+.reject li::before{background:var(--c-max-fg)}
+.callout{border-left:3px solid var(--accent); background:var(--accent-soft); padding:14px 18px; border-radius:0 8px 8px 0; max-width:80ch}
+.callout p{color:var(--fg)}
+.fill{display:inline-block; min-width:52px; padding:1px 8px; border-bottom:1.5px dashed var(--accent-line); background:var(--accent-soft); font-family:var(--mono); font-size:13.5px; color:var(--fg-strong); border-radius:3px 3px 0 0; font-variant-numeric:tabular-nums}
+.fill:empty::before{content:"fill in"; color:var(--muted); opacity:.65; font-size:11px; letter-spacing:.04em}
+.note{font-family:var(--mono); font-size:12px; color:var(--muted); border:1px dashed var(--border-2); padding:12px 16px; border-radius:8px; max-width:80ch}
+
+/* azure design table */
+.flow{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px}
+.layer{border:1px solid var(--border); border-radius:10px; background:var(--surface-2); padding:14px 16px}
+.layer h5{margin:0 0 8px; font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent)}
+.layer p{font-size:13.5px; color:var(--fg)}
+.layer p+p{margin-top:7px}
+.layer code{font-family:var(--mono); font-size:12.5px; background:var(--chip-bg); padding:1px 5px; border-radius:4px; color:var(--fg)}
+
+/* ---- filters ---- */
+.filters{position:sticky; top:calc(env(safe-area-inset-top,0px) + 53px); z-index:30; background:color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter:blur(10px); border:1px solid var(--border); border-radius:14px; padding:16px 18px; margin-bottom:22px; display:flex; flex-direction:column; gap:14px}
+.frow{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.frow .flabel{font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); min-width:92px}
+.search{flex:1; min-width:200px; background:var(--surface); border:1px solid var(--border-2); border-radius:8px; padding:9px 12px; color:var(--fg); font-family:var(--sans); font-size:14px}
+.search::placeholder{color:var(--muted)}
+select.sort{background:var(--surface); border:1px solid var(--border-2); border-radius:8px; padding:9px 10px; color:var(--fg); font-family:var(--mono); font-size:12px}
+.chips{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.chip{font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:999px; border:1px solid var(--chip-line); background:var(--chip-bg); color:var(--chip-fg); cursor:pointer; letter-spacing:.01em; transition:background .12s, color .12s, border-color .12s}
+.chip:hover{border-color:var(--accent-line); color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:500}
+.chip .ct{opacity:.6; margin-left:4px; font-size:10.5px}
+.fbar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-top:1px solid var(--border); padding-top:12px}
+.count{font-family:var(--mono); font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums}
+.count b{color:var(--fg-strong)}
+.clearbtn{font-family:var(--mono); font-size:11.5px; border:1px solid var(--border-2); background:var(--surface); color:var(--muted); border-radius:7px; padding:6px 11px; cursor:pointer}
+.clearbtn:hover{color:var(--accent); border-color:var(--accent-line)}
+
+/* ---- gallery ---- */
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:18px}
+.card{border:1px solid var(--border); border-radius:12px; background:var(--surface); overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow)}
+.shot{display:block; width:100%; border:0; padding:0; background:var(--sheet); cursor:zoom-in; border-bottom:1px solid var(--border); position:relative; aspect-ratio:16/10; overflow:hidden}
+.shot img{width:100%; height:100%; object-fit:contain; display:block; padding:8px}
+.shot:hover img{opacity:.9}
+.shot .zoom{position:absolute; right:8px; bottom:8px; background:rgba(16,26,46,.78); color:#fff; font-family:var(--mono); font-size:10px; letter-spacing:.06em; padding:3px 7px; border-radius:5px; text-transform:uppercase; opacity:0; transition:opacity .14s}
+.shot:hover .zoom{opacity:1}
+.cbody{padding:13px 15px 15px; display:flex; flex-direction:column; gap:9px; flex:1}
+.chd{display:flex; justify-content:space-between; gap:10px; align-items:baseline}
+.cbody h3{font-size:16.5px; font-weight:700; letter-spacing:-.01em}
+.cat{font-family:var(--mono); font-size:10.5px; color:var(--muted); text-align:right; flex-shrink:0}
+.cchips{display:flex; gap:5px; flex-wrap:wrap}
+.tag{font-family:var(--mono); font-size:10.5px; padding:3px 7px; border-radius:5px; background:var(--chip-bg); color:var(--chip-fg); border:1px solid var(--chip-line)}
+.tag.prov{background:var(--accent-soft); color:var(--accent); border-color:var(--accent-line)}
+.cx{font-family:var(--mono); font-size:10.5px; padding:3px 8px; border-radius:5px; font-weight:500; letter-spacing:.02em}
+.cx.Low{background:var(--c-low-bg); color:var(--c-low-fg)}
+.cx.Medium{background:var(--c-med-bg); color:var(--c-med-fg)}
+.cx.High{background:var(--c-high-bg); color:var(--c-high-fg)}
+.cx.Very.High{background:var(--c-max-bg); color:var(--c-max-fg)}
+.metricline{margin-top:10px; font-family:var(--mono); font-size:12.5px; color:var(--muted)}
+.chip.ref{margin-top:2px}
+.cline{font-family:var(--mono); font-size:10.5px; color:var(--muted); margin-top:auto; padding-top:3px; font-variant-numeric:tabular-nums; display:flex; gap:10px; flex-wrap:wrap}
+.empty{padding:44px 20px; text-align:center; color:var(--muted); font-family:var(--mono); font-size:13px; border:1px dashed var(--border-2); border-radius:12px}
+
+/* ---- distribution ---- */
+.dist{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; margin-top:6px}
+.dbar{display:flex; flex-direction:column; gap:8px}
+.dbar h4{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted)}
+.brow{display:grid; grid-template-columns:112px 1fr 34px; gap:10px; align-items:center; font-family:var(--mono); font-size:11.5px; color:var(--fg)}
+.btrack{height:9px; background:var(--surface-2); border-radius:99px; overflow:hidden; border:1px solid var(--border)}
+.bfill{height:100%; background:var(--accent); border-radius:99px}
+.bnum{text-align:right; color:var(--muted); font-variant-numeric:tabular-nums}
+
+/* ---- lightbox ---- */
+.lb{position:fixed; inset:0; z-index:90; background:color-mix(in srgb, #05070d 82%, transparent); backdrop-filter:blur(4px); display:none; padding:20px; overflow:auto}
+.lb[data-open="1"]{display:block}
+.lb-in{max-width:1400px; margin:0 auto; background:var(--surface); border:1px solid var(--border-2); border-radius:14px; overflow:hidden; box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.lb-h{display:flex; align-items:center; gap:14px; padding:12px 16px; border-bottom:1px solid var(--border); flex-wrap:wrap; position:sticky; top:0; background:var(--surface); z-index:2}
+.lb-h h3{font-size:16px}
+.lb-h .cat{text-align:left}
+.lb-h .sp{margin-left:auto}
+.lbclose{font-family:var(--mono); font-size:11.5px; border:1px solid var(--border-2); background:var(--surface-2); color:var(--fg); border-radius:7px; padding:6px 11px; cursor:pointer}
+.lbimg{background:var(--sheet); display:block; width:100%}
+.lbfoot{padding:12px 16px; border-top:1px solid var(--border); font-family:var(--mono); font-size:11.5px; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap}
+
+footer{margin-top:56px; padding-top:22px; border-top:1px solid var(--border); font-family:var(--mono); font-size:11.5px; color:var(--muted); display:flex; gap:10px 20px; flex-wrap:wrap; justify-content:space-between}
+
+@media (max-width:640px){
+  .wrap{padding-inline:16px}
+  .top-in{padding-inline:16px}
+  .filters{position:static}
+  .frow .flabel{min-width:100%}
+  .grid{grid-template-columns:1fr; gap:14px}
+  .q-head{grid-template-columns:1fr; gap:8px}
+  .q-num{font-size:26px}
+  .q-body,.q-head{padding-inline:16px}
+  .brow{grid-template-columns:84px 1fr 30px}
+  .hero{padding-block:30px 24px}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important; animation:none!important}}
+
+.gate{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(120% 120% at 50% 0%, var(--surface-2), var(--bg) 60%);overflow:auto}
+.gate[hidden]{display:none}
+.gate-card{width:min(440px,100%);background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;box-shadow:var(--shadow);padding:28px 26px 24px;display:flex;flex-direction:column;gap:12px}
+.gate-mark{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.gate-card h1{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.gate-card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.gate-lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.gate-row{display:flex;gap:8px}
+.gate-in{flex:1;background:var(--surface-2);border:1px solid var(--border-2);border-radius:8px;
+  padding:11px 12px;color:var(--fg);font-family:var(--mono);font-size:14px}
+.gate-btn{background:var(--accent);color:var(--accent-ink);border:1px solid var(--accent);border-radius:8px;
+  padding:11px 18px;font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.03em;cursor:pointer}
+.gate-btn[disabled]{opacity:.6;cursor:progress}
+.gate-status{font-family:var(--mono);font-size:12px;color:var(--muted);min-height:1.2em}
+.gate-status.err{color:var(--c-max-fg)}
+.gate-status.ok{color:var(--ok)}
+.gate-note{font-size:12px;border-top:1px dashed var(--border-2);padding-top:12px;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <form class="gate-card" id="gateform" autocomplete="off">
+    <div class="gate-mark">Cloud Architecture Portfolio</div>
+    <h1>Protected portfolio</h1>
+    <p>This portfolio contains client architecture diagrams and is encrypted. Enter the password to decrypt it in your browser.</p>
+    <label class="gate-lbl" for="pw">Password</label>
+    <div class="gate-row">
+      <input class="gate-in" id="pw" type="password" inputmode="text" autocomplete="current-password" required>
+      <button class="gate-btn" id="unlock" type="submit">Unlock</button>
+    </div>
+    <p class="gate-status" id="status" role="status" aria-live="polite"></p>
+    <p class="gate-note">Client names and diagrams are protected. Please treat this material as confidential and do not re-share it.</p>
+  </form>
+</div>
+
+<div id="site" hidden>
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>Cloud Architecture Portfolio</b><span>Fabrizio · Cloud / AI Architect</span></div>
+    <nav class="topnav">
+      <a href="#perguntas">The 4 Questions</a>
+      <a href="#galeria">Architectures</a>
+      <a href="#panorama">Panorama</a>
+      <button class="themebtn" id="themebtn" type="button">theme</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow">Preparation · EY Interview — Solutions Architect</span>
+    <h1>Architectures I designed, with the reasoning behind every decision.</h1>
+    <p class="lede">A selection of <span data-n-arch>71</span> representative architectures from a body of <span data-n-art>334</span> artifacts, grouped by client, complexity, security, and high availability. Every architecture below came from a real <code>.drawio</code> file or diagram screenshot in my working directory and was rendered faithfully — nothing was redrawn for the presentation.</p>
+    <div class="who">
+      <span><b>São Paulo, BR</b> · America/Sao_Paulo</span>
+      <span>Providers: <b>Huawei Cloud · AWS · Azure · GCP · OCI · Alibaba</b></span>
+      <span>Domains: <b>Banks, fintechs, insurance, retail, telecom, education, public sector</b></span>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <section id="perguntas">
+    <div class="sec-head">
+      <h2>The four interview questions</h2>
+      <span class="kicker">answers grounded in the body of work</span>
+    </div>
+    <div class="answers" id="answers"></div>
+  </section>
+
+  <section id="galeria">
+    <div class="sec-head">
+      <h2>Architectures</h2>
+      <span class="kicker">filter by client, provider, complexity, security and HA</span>
+    </div>
+    <div class="filters" id="filters">
+      <div class="frow">
+        <label class="flabel" for="q">Search</label>
+        <input class="search" id="q" type="search" placeholder="Client, domain, technology (e.g. AKS, Kafka, landing zone, DR)">
+        <select class="sort" id="sort" aria-label="Sort">
+          <option value="cx-desc">Complexity ↓</option>
+          <option value="cx-asc">Complexity ↑</option>
+          <option value="client">Client A–Z</option>
+          <option value="size-desc">Largest diagram</option>
+        </select>
+      </div>
+      <div class="frow"><span class="flabel">Provider</span><div class="chips" id="f-prov"></div></div>
+      <div class="frow"><span class="flabel">Complexity</span><div class="chips" id="f-cx"></div></div>
+      <div class="frow"><span class="flabel">Security</span><div class="chips" id="f-sec"></div></div>
+      <div class="frow"><span class="flabel">High availability</span><div class="chips" id="f-ha"></div></div>
+      <div class="fbar">
+        <span class="count" id="count"></span>
+        <button class="clearbtn" id="clear" type="button">Clear filters</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" hidden>No architecture matches those filters. Clear one to see more.</div>
+  </section>
+
+  <section id="panorama">
+    <div class="sec-head">
+      <h2>Portfolio panorama</h2>
+      <span class="kicker">distribution of the selected architectures</span>
+    </div>
+    <div class="dist" id="dist"></div>
+  </section>
+
+  <footer>
+    <span>Cloud Architecture Portfolio · <span data-n-arch>71</span> architectures / <span data-n-clients>62</span> clients · body of <span data-n-art>334</span> artifacts</span>
+    <span>Diagrams rendered from the original draw.io files</span>
+  </footer>
+</div>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Enlarged diagram">
+  <div class="lb-in">
+    <div class="lb-h">
+      <h3 id="lb-t"></h3>
+      <span class="cat" id="lb-c"></span>
+      <span class="sp"></span>
+      <div class="cchips" id="lb-x"></div>
+      <button class="lbclose" id="lbclose" type="button">Close (Esc)</button>
+    </div>
+    <img class="lbimg" id="lb-img" alt="">
+    <div class="lbfoot" id="lb-f"></div>
+  </div>
+</div>
+
+</div>
+<script>
+let DATA = null, ANSWERS = null, IMG = {};
+/* ---------- answers (content grounded in the body of work) ---------- */
+const ART = (slug) => DATA.find(d => d.slug === slug) || null;
+const refChip = (slug) => {
+  const a = ART(slug); if (!a) return '';
+  return `<button class="chip ref" type="button" data-jump="${a.slug}" title="View in the portfolio">${a.client} · ${a.cat}<span class="ct">open</span></button>`;
+};
+
+
+function renderAnswers(){
+  document.getElementById('answers').innerHTML = ANSWERS.map(a=>`
+    <article class="q" id="${a.n==='01'?'q1':a.n==='02'?'q2':a.n==='03'?'q3':'q4'}">
+      <div class="q-head">
+        <div class="q-num">${a.n}</div>
+        <div><span class="q-tag">${a.tag}</span><h3>${a.q}</h3></div>
+      </div>
+      <div class="q-body">${a.html}</div>
+    </article>`).join('');
+}
+
+/* ---------- stats + distribution ---------- */
+function renderStats(){
+  const clients = new Set(DATA.map(d=>d.client)).size;
+  const provs = new Set(); DATA.forEach(d=>d.tags.forEach(t=>{ if(t!=='Undefined') provs.add(t); }));
+  const multi = DATA.filter(d=>d.tags.includes('Multicloud')||d.tags.includes('Hybrid')).length;
+  const hi = DATA.filter(d=>d.sec.length>=3).length;
+  const tiles = [
+    [String(DATA.length),'architectures'],[String(DATA.length+144),'artifacts in the body of work'],[String(clients),'clients'],
+    [String(DATA.reduce((a,d)=>a+d.cells,0).toLocaleString('en-US')),'elements drawn'],
+    [String(multi),'multi-cloud or hybrid'],[String(hi),'with 3+ security controls']
+  ];
+  document.getElementById('stats').innerHTML = tiles.map(([n,l])=>`<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+  document.querySelectorAll('[data-n-arch]').forEach(e=>e.textContent=DATA.length);
+  document.querySelectorAll('[data-n-clients]').forEach(e=>e.textContent=clients);
+  document.querySelectorAll('[data-n-art]').forEach(e=>e.textContent=(186+148).toLocaleString('en-US'));
+}
+function bars(title, pairs){
+  const max = Math.max(1, ...pairs.map(p=>p[1]));
+  return `<div class="dbar"><h4>${title}</h4>${pairs.map(([k,v])=>`
+    <div class="brow"><span>${k}</span><span class="btrack"><span class="bfill" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="bnum">${v}</span></div>`).join('')}</div>`;
+}
+function renderDist(){
+  const cxOrder=['Low','Medium','High','Very High'];
+  const cx = cxOrder.map(k=>[k, DATA.filter(d=>d.complexity===k).length]);
+  const pf={}; DATA.forEach(d=>d.tags.forEach(t=>{ if(t!=='Undefined') pf[t]=(pf[t]||0)+1; }));
+  const prov = Object.entries(pf).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const sf={}; DATA.forEach(d=>d.sec.forEach(s=>sf[s]=(sf[s]||0)+1));
+  const sec = Object.entries(sf).sort((a,b)=>b[1]-a[1]);
+  const hf={}; DATA.forEach(d=>d.ha.forEach(s=>hf[s]=(hf[s]||0)+1));
+  const ha = Object.entries(hf).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('dist').innerHTML =
+    bars('Complexity', cx) + bars('Providers and models', prov) + bars('Security controls', sec) + bars('High availability', ha);
+}
+
+/* ---------- filters ---------- */
+const state = { q:'', prov:new Set(), cx:new Set(), sec:new Set(), ha:new Set(), sort:'cx-desc' };
+const LS='ey-portfolio-filters-v2';
+function saveState(){ try{ localStorage.setItem(LS, JSON.stringify({q:state.q,prov:[...state.prov],cx:[...state.cx],sec:[...state.sec],ha:[...state.ha],sort:state.sort})); }catch(e){} }
+function loadState(){ try{ const s=JSON.parse(localStorage.getItem(LS)||'null'); if(!s) return;
+  state.q=s.q||''; state.sort=s.sort||'cx-desc';
+  ['prov','cx','sec','ha'].forEach(k=>{ state[k]=new Set(Array.isArray(s[k])?s[k]:[]); });
+}catch(e){} }
+
+const CX_ORDER={'Low':0,'Medium':1,'High':2,'Very High':3};
+function facetCounts(){
+  const pf={}, sf={}, hf={};
+  DATA.forEach(d=>{ d.tags.forEach(t=>{ if(t!=='Undefined') pf[t]=(pf[t]||0)+1; });
+    d.sec.forEach(s=>sf[s]=(sf[s]||0)+1); d.ha.forEach(s=>hf[s]=(hf[s]||0)+1); });
+  return {prov:Object.entries(pf).sort((a,b)=>b[1]-a[1]),
+          cx:Object.keys(CX_ORDER).map(k=>[k,DATA.filter(d=>d.complexity===k).length]),
+          sec:Object.entries(sf).sort((a,b)=>b[1]-a[1]),
+          ha:Object.entries(hf).sort((a,b)=>b[1]-a[1])};
+}
+function chip(label, count, set, key){
+  return `<button class="chip" type="button" data-f="${key}" data-v="${label}" aria-pressed="${set.has(label)}">${label}<span class="ct">${count}</span></button>`;
+}
+function renderFilters(){
+  const f=facetCounts();
+  document.getElementById('f-prov').innerHTML = f.prov.map(([k,v])=>chip(k,v,state.prov,'prov')).join('');
+  document.getElementById('f-cx').innerHTML   = f.cx.map(([k,v])=>chip(k,v,state.cx,'cx')).join('');
+  document.getElementById('f-sec').innerHTML  = f.sec.map(([k,v])=>chip(k,v,state.sec,'sec')).join('');
+  document.getElementById('f-ha').innerHTML   = f.ha.map(([k,v])=>chip(k,v,state.ha,'ha')).join('');
+}
+function matches(d){
+  const q=state.q.trim().toLowerCase();
+  if(q){
+    const hay=[d.client,d.cat,d.file,...d.feats,...d.sec,...d.ha,...d.tags].join(' ').toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  if(state.prov.size && !d.tags.some(t=>state.prov.has(t))) return false;
+  if(state.cx.size && !state.cx.has(d.complexity)) return false;
+  if(state.sec.size && !d.sec.some(s=>state.sec.has(s))) return false;
+  if(state.ha.size && !d.ha.some(s=>state.ha.has(s))) return false;
+  return true;
+}
+function sortData(arr){
+  const a=[...arr];
+  if(state.sort==='cx-desc') a.sort((x,y)=>CX_ORDER[y.complexity]-CX_ORDER[x.complexity]||y.score-x.score);
+  else if(state.sort==='cx-asc') a.sort((x,y)=>CX_ORDER[x.complexity]-CX_ORDER[y.complexity]||y.score-x.score);
+  else if(state.sort==='client') a.sort((x,y)=>x.client.localeCompare(y.client,'en'));
+  else if(state.sort==='size-desc') a.sort((x,y)=>(y.w*y.h)-(x.w*x.h));
+  return a;
+}
+function card(d){
+  const cxClass = d.complexity.replace(/ /g,'.');
+  const tags = d.tags.slice(0,3).map(t=>`<span class="tag prov">${t}</span>`).join('');
+  const feats = d.feats.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('');
+  const shot = d.png ? `<img loading="lazy" src="${IMG[d.slug]||''}" alt="Architecture diagram — ${d.client}, ${d.cat}">`
+                     : `<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#6b7280;font-family:var(--mono);font-size:12px">diagram not captured</div>`;
+  return `<article class="card">
+    <button class="shot" type="button" data-open="${d.slug}" ${d.png?'':'disabled'} aria-label="Enlarge diagram ${d.client}">${shot}<span class="zoom">enlarge</span></button>
+    <div class="cbody">
+      <div class="chd"><h3>${d.client}</h3><span class="cat">${d.cat}</span></div>
+      <div class="cchips"><span class="cx ${cxClass}">${d.complexity}</span>${tags}</div>
+      <div class="cchips">${feats}</div>
+      <div class="cline"><span>${d.cells.toLocaleString('en-US')} elements</span><span>${d.edges} connections</span><span>${d.sec.length}S / ${d.ha.length}HA</span></div>
+    </div>
+  </article>`;
+}
+function renderGrid(){
+  const arr = sortData(DATA.filter(matches));
+  document.getElementById('grid').innerHTML = arr.map(card).join('');
+  document.getElementById('empty').hidden = arr.length>0;
+  const active = state.prov.size+state.cx.size+state.sec.size+state.ha.size + (state.q.trim()?1:0);
+  document.getElementById('count').innerHTML =
+    `<b>${arr.length}</b> of ${DATA.length} architectures${active?` · ${active} filter${active>1?'s':''} active`:''}`;
+}
+
+/* ---------- lightbox ---------- */
+const lb=document.getElementById('lb');
+let lastFocus=null;
+function openLB(slug){
+  const d=ART(slug); if(!d||!d.png) return;
+  lastFocus=document.activeElement;
+  document.getElementById('lb-t').textContent=d.client;
+  document.getElementById('lb-c').textContent=d.cat;
+  document.getElementById('lb-x').innerHTML=`<span class="cx ${d.complexity.replace(/ /g,'.')}">${d.complexity}</span>`+d.tags.map(t=>`<span class="tag prov">${t}</span>`).join('');
+  const img=document.getElementById('lb-img'); img.src=`${IMG[d.slug]||''}`; img.alt=`Architecture diagram — ${d.client}, ${d.cat}`;
+  document.getElementById('lb-f').innerHTML=[...d.sec.map(s=>'Sec: '+s), ...d.ha.map(h=>'HA: '+h)].slice(0,14).map(t=>`<span>${t}</span>`).join('');
+  lb.dataset.open='1'; document.body.style.overflow='hidden';
+  document.getElementById('lbclose').focus();
+}
+function closeLB(){ lb.dataset.open='0'; document.body.style.overflow=''; if(lastFocus) lastFocus.focus(); }
+document.getElementById('lbclose').addEventListener('click', closeLB);
+lb.addEventListener('click', e=>{ if(e.target===lb) closeLB(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'&&lb.dataset.open==='1') closeLB(); });
+
+/* ---------- events ---------- */
+document.addEventListener('click', e=>{
+  const f=e.target.closest('.chip[data-f]');
+  if(f){ const k=f.dataset.f, v=f.dataset.v;
+    if(state[k].has(v)) state[k].delete(v); else state[k].add(v);
+    f.setAttribute('aria-pressed', state[k].has(v)); saveState(); renderGrid(); return; }
+  const o=e.target.closest('.shot[data-open]'); if(o&&!o.disabled){ openLB(o.dataset.open); return; }
+  const j=e.target.closest('.chip[data-jump]'); if(j){
+    const d=ART(j.dataset.jump); if(!d) return;
+    state.q=d.client; document.getElementById('q').value=d.client;
+    ['prov','cx','sec','ha'].forEach(k=>state[k].clear()); saveState(); renderFilters(); renderGrid();
+    document.getElementById('galeria').scrollIntoView({behavior:'smooth',block:'start'}); }
+});
+document.getElementById('q').addEventListener('input', e=>{ state.q=e.target.value; saveState(); renderGrid(); });
+document.getElementById('sort').addEventListener('change', e=>{ state.sort=e.target.value; saveState(); renderGrid(); });
+document.getElementById('clear').addEventListener('click', ()=>{
+  state.q=''; document.getElementById('q').value='';
+  ['prov','cx','sec','ha'].forEach(k=>state[k].clear());
+  state.sort='cx-desc'; document.getElementById('sort').value='cx-desc';
+  saveState(); renderFilters(); renderGrid();
+});
+
+/* ---------- theme ---------- */
+(function(){
+  const b=document.getElementById('themebtn');
+  let cur=null;
+  try{ cur=localStorage.getItem('ey-portfolio-theme'); }catch(e){}
+  if(cur) document.documentElement.setAttribute('data-theme',cur);
+  b.addEventListener('click',()=>{
+    const isDark = document.documentElement.getAttribute('data-theme')==='dark' ||
+      (!document.documentElement.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    const next = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme',next);
+    try{ localStorage.setItem('ey-portfolio-theme',next); }catch(e){}
+  });
+})();
+
+/* ---------- boot ---------- */
+function boot(){
+  loadState();
+  document.getElementById('q').value=state.q;
+  document.getElementById('sort').value=state.sort;
+  renderAnswers(); renderStats(); renderDist(); renderFilters(); renderGrid();
+}
+
+/* ---------- gate: decrypt in the browser, nothing sensitive is served ---------- */
+const $ = (s)=>document.querySelector(s);
+const hexToBytes = (h)=>Uint8Array.from(h.match(/../g).map(x=>parseInt(x,16)));
+const b64ToBytes = (b)=>Uint8Array.from(atob(b), c=>c.charCodeAt(0));
+function setStatus(msg, cls){ const s=$('#status'); s.textContent=msg; s.className='gate-status'+(cls?' '+cls:''); }
+
+async function deriveKey(pw, salt, iters){
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iters, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+}
+function unpack(buf){
+  const dv = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const metaLen = dv.getUint32(0);
+  const meta = JSON.parse(new TextDecoder().decode(new Uint8Array(buf.buffer, buf.byteOffset+4, metaLen)));
+  let off = 4 + metaLen;
+  const blobs = {};
+  for (const d of meta.data){
+    if (!d.png) continue;
+    const n = dv.getUint32(off); off += 4;
+    const bytes = new Uint8Array(buf.buffer, buf.byteOffset+off, n); off += n;
+    blobs[d.slug] = URL.createObjectURL(new Blob([bytes], {type:'image/webp'}));
+  }
+  return { meta, blobs };
+}
+
+let cached = null;
+async function fetchBundle(){
+  if (cached) return cached;
+  setStatus('Downloading encrypted bundle…');
+  const p = await (await fetch('params.json', {cache:'no-store'})).json();
+  const buf = new Uint8Array(await (await fetch('assets.bin', {cache:'force-cache'})).arrayBuffer());
+  cached = { p, buf };
+  return cached;
+}
+
+async function unlock(pw){
+  try{
+    const { p, buf } = await fetchBundle();
+    setStatus('Deriving key…');
+    const key = await deriveKey(pw, hexToBytes(p.salt), p.iterations);
+    const gz = new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM', iv:b64ToBytes(p.iv)}, key, buf));
+    setStatus('Decrypting…');
+    const raw = await new Response(new Blob([gz]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    const { meta, blobs } = unpack(new Uint8Array(raw));
+    IMG = blobs; DATA = meta.data;
+    ANSWERS = new Function('refChip','ART','return ('+meta.answers+')')(refChip, ART);
+    setStatus('Ready.', 'ok');
+    $('#gate').hidden = true;
+    $('#site').hidden = false;
+    boot();
+  }catch(err){
+    console.error(err);
+    setStatus('Could not unlock — wrong password, or the bundle failed to load.', 'err');
+    const b=$('#unlock'); b.disabled=false; b.textContent='Unlock';
+  }
+}
+$('#gateform').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const b=$('#unlock'); b.disabled=true; b.textContent='Unlocking…';
+  unlock($('#pw').value);
+});
+/* warm the (large) bundle as soon as the page settles */
+if ('requestIdleCallback' in window) requestIdleCallback(()=>fetchBundle().catch(()=>{}));
+
+</script>
+
+</body>
+</html>
